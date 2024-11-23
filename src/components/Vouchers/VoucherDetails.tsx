@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 export interface VoucherDetailProps {
     id: string;
@@ -14,7 +15,7 @@ export interface VoucherDetailProps {
 }
 
 const VoucherDetail: React.FC<VoucherDetailProps> = (props) => {
-    const { id, title, description, imageUrl, startDate, expiryDate, codes } = props;
+    const { title, description, imageUrl, startDate, expiryDate, codes } = props;
     const router = useRouter();
 
     const [availableCodes, setAvailableCodes] = useState(codes); // Daftar kode yang belum diklaim
@@ -35,9 +36,11 @@ const VoucherDetail: React.FC<VoucherDetailProps> = (props) => {
             {/* Gambar dan Informasi Utama */}
             <div className="p-6 bg-white border-4 border-black rounded-lg shadow-md mb-8">
                 {imageUrl && (
-                    <img
+                    <Image
                         src={imageUrl}
                         alt={title}
+                        width={300}
+                        height={200}
                         className="w-full h-60 object-cover rounded-md mb-4"
                     />
                 )}

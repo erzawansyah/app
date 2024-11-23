@@ -1,5 +1,6 @@
 import Link from "next/link";
 import React from "react";
+import Image from "next/image";
 
 export interface VoucherItemsProps {
     id: string;
@@ -36,11 +37,14 @@ const VoucherItems: React.FC<VoucherItemsProps> = (props) => {
                 {/* Gambar Voucher */}
                 {imageUrl && (
                     <div className="mb-4">
-                        <img
+                        <Image
                             src={imageUrl}
                             alt={title}
+                            width={300}
+                            height={200}
                             className="w-full h-40 object-cover rounded-md"
                         />
+
                     </div>
                 )}
 
