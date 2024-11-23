@@ -1,4 +1,7 @@
 import type { Config } from "tailwindcss";
+import tailwindTypography from "@tailwindcss/typography";
+import tailwindForms from "@tailwindcss/forms";
+import tailwindAspectRatios from "@tailwindcss/aspect-ratio";
 
 export default {
   content: [
@@ -66,5 +69,5 @@ export default {
       },
     },
   },
-  plugins: [],
+  plugins: [tailwindTypography, tailwindForms, tailwindAspectRatios],
 } satisfies Config;

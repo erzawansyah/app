@@ -1,12 +1,12 @@
-"use client";
 import Link from "next/link";
 import EventNotification from "@/components/EventNotification";
 
-const Dashboard = () => {
+const Dashboard = async () => {
+
     return (
         <>
             <EventNotification />
-            <div className="w-full max-w-md p-6 bg-white border-4 border-black rounded-lg shadow-md">
+            <div className="w-full max-w-md mx-auto p-6 bg-white border-4 border-black rounded-lg shadow-md">
                 <h1 className="text-3xl font-extrabold text-black uppercase tracking-wide text-center">
                     Dashboard
                 </h1>

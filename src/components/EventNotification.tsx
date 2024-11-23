@@ -49,7 +49,7 @@ const EventNotification: React.FC<EventNotificationProps> = ({ apiUrl }) => {
     }
 
     return (
-        <div className="w-full max-w-md mb-6 p-4 bg-yellow-300 border-4 border-black rounded-lg shadow-md text-center">
+        <div className="w-full max-w-md mb-6 p-4 bg-yellow-300 border-4 border-black rounded-lg shadow-md text-center mx-auto">
             <h2 className="text-lg font-extrabold text-black flex justify-center items-center">
                 🎉 Event Sedang Berlangsung!
             </h2>

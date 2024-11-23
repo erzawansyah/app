@@ -1,38 +1,40 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
 import "./globals.css";
 import Header from "@/components/Header";
 import PageContent from "@/components/PageContent";
 import Footer from "@/components/Footer";
+import { Ubuntu } from "next/font/google"
+import { createClient } from "@/lib/utils/supabase/supabase-ssr";
 
-const geistSans = localFont({
-  src: "../fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "../fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
+const globalfont = Ubuntu({
+  weight: ["300", "400", "500", "700"],
+  subsets: ['latin'],
+  display: 'swap',
+})
 
 export const metadata: Metadata = {
   title: "Omah Diksi App ",
   description: "Platform penukaran voucher Omah Diksi",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+  // is user logged in
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  const isLoggedIn = user ? true : false;
+
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${globalfont.className} antialiased`}
       >
         <div className="flex flex-col min-h-dvh">
-          <Header />
+          <Header isLoggedIn={isLoggedIn} />
 
           {/* Main Content */}
           <PageContent>

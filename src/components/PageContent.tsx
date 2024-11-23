@@ -4,8 +4,8 @@ const PageContent = ({
     children: React.ReactNode;
 }>) => {
     return (
-        <main className="flex-grow bg-gray-light px-6 py-8">
-            <div className="max-w-7xl mx-auto">
+        <main className="flex-grow bg-gray-light px-4 py-6 w-full">
+            <div className="container mx-auto">
                 {children}
             </div>
         </main>
