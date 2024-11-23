@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import VoucherDetail, { VoucherDetailProps } from "@/components/Vouchers/VoucherDetails";
+import VoucherDetail from "@/components/Vouchers/VoucherDetails";
 
 const voucherData = {
     id: "voucher-1",
