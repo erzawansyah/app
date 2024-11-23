@@ -2,39 +2,24 @@ import React from "react";
 import VoucherItems, { VoucherItemsProps, } from "@/components/Vouchers/VoucherItems";
 import { sortVouchers } from "@/lib/helpers/voucherSort";
 import { createClient } from "@/lib/utils/supabase/supabase-ssr";
+import { VoucherClaim } from "./[id]/page";
 
-const voucherItemsData: VoucherItemsProps[] = [
-    {
-        id: "voucher-1",
-        title: "Diskon 20% Semua Menu",
-        description: "Voucher ini berlaku untuk semua menu di Omah Diksi.",
-        totalCount: 10,
-        usedCount: 3,
-        imageUrl: "https://via.placeholder.com/300x200",
-        startDate: "2024-11-01",
-        expiryDate: "2024-11-31",
-    },
-    {
-        id: "voucher-2",
-        title: "Gratis Kopi untuk Pembelian Pertama",
-        description: "Dapatkan gratis kopi untuk pembelian pertama Anda di Omah Diksi.",
-        totalCount: 5,
-        usedCount: 5,
-        imageUrl: "https://via.placeholder.com/300x200",
-        startDate: "2024-02-01",
-        expiryDate: "2024-02-28",
-    },
-    {
-        id: "voucher-3",
-        title: "Diskon 10% Semua Buku",
-        description: "Voucher ini berlaku untuk pembelian buku apa pun di Omah Diksi.",
-        totalCount: 8,
-        usedCount: 2,
-        imageUrl: "https://via.placeholder.com/300x200",
-        startDate: "2023-12-01",
-        expiryDate: "2023-12-31",
-    },
-];
+
+export interface VoucherDefinition {
+    id: string; // UUID primary key
+    title: string; // Judul voucher
+    description: string; // Deskripsi voucher
+    image_url: string | null; // URL gambar voucher (opsional)
+    start_date: string; // Tanggal mulai berlaku
+    end_date: string; // Tanggal berakhir berlaku
+    is_active: boolean; // Status apakah voucher aktif
+    created_at: string; // Timestamp saat voucher dibuat
+    updated_at: string; // Timestamp terakhir kali voucher diperbarui
+    prefix: string; // Prefix unik untuk voucher
+    max_claim: number; // Jumlah maksimum klaim
+    usedCount?: number; // Jumlah klaim yang sudah digunakan
+    totalCount?: number; // Jumlah total klaim
+}
 
 
 const Vouchers: React.FC = async () => {
@@ -67,12 +52,12 @@ const getVoucherData = async () => {
     const response = vouchers?.map((voucher) => {
         return {
             ...voucher,
-            usedCount: voucher.voucher_claims.map((claim: any) => claim.is_redeemed ? 1 : 0).reduce((a: number, b: number) => a + b, 0),
+            usedCount: voucher.voucher_claims.map((claim: VoucherClaim) => claim.is_redeemed ? 1 : 0).reduce((a: number, b: number) => a + b, 0),
             totalCount: voucher.voucher_claims.length,
         };
     });
 
-    return response?.map((voucher: any) => {
+    return response?.map((voucher: VoucherDefinition) => {
         return {
             id: voucher.id,
             title: voucher.title,
@@ -83,5 +68,5 @@ const getVoucherData = async () => {
             usedCount: voucher.usedCount,
             totalCount: voucher.totalCount,
         };
-    });
+    }) as VoucherItemsProps[];
 };

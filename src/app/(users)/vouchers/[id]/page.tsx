@@ -2,6 +2,18 @@ import React from "react";
 import VoucherDetail, { VoucherDetailProps } from "@/components/Vouchers/VoucherDetails";
 import { createClient } from "@/lib/utils/supabase/supabase-ssr";
 
+
+export interface VoucherClaim {
+    id: string; // UUID primary key
+    user_id: string; // Foreign key ke auth.users.id
+    voucher_id: string; // Foreign key ke vouchers.id
+    claimed_at: string; // Timestamp saat voucher diklaim
+    is_redeemed: boolean; // Status apakah voucher sudah diredeem
+    redeemed_at: string | null; // Timestamp saat voucher diredeem, null jika belum diredeem
+    voucher_code: string; // Kode unik voucher
+}
+
+
 const VoucherDetailPage = async ({
     params,
 }: {
@@ -37,6 +49,6 @@ const getVoucherData = async (id: string): Promise<VoucherDetailProps> => {
         imageUrl: voucher.image_url,
         startDate: voucher.start_date,
         expiryDate: voucher.end_date,
-        codes: voucher.voucher_claims.filter((claim: any) => !claim.is_redeemed).map((claim: any) => claim.voucher_code),
+        codes: voucher.voucher_claims.filter((claim: VoucherClaim) => !claim.is_redeemed).map((claim: VoucherClaim) => claim.voucher_code),
     }
 }
