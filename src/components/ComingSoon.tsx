@@ -13,7 +13,7 @@ const ComingSoon: React.FC<ComingSoonProps> = ({
 }) => {
     return (
         <>
-            <div className="w-full max-w-md p-6 bg-white border-4 border-black rounded-lg shadow-md text-center">
+            <div className="w-full max-w-md p-6 bg-white border-4 border-black rounded-lg shadow-md text-center mx-auto">
                 <h1 className="text-3xl font-extrabold text-black uppercase tracking-wide">
                     Coming Soon
                 </h1>

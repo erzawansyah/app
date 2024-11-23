@@ -3,8 +3,17 @@ import { updateSession } from "@/lib/utils/supabase/middleware";
 
 export async function middleware(request: NextRequest) {
   const { user, response } = await updateSession(request);
-  const host = process.env.NEXT_PUBLIC_HOST;
-  const protectedRoutes = ["/dashboard", "/vouchers", "/settings", "/events"];
+  const protocol = request.headers.get("x-forwarded-proto") || "http";
+  const site = request.headers.get("host");
+  const host = `${protocol}://${site}`;
+
+  const protectedRoutes = [
+    "/dashboard",
+    "/vouchers",
+    "/settings",
+    "/events",
+    "/claims",
+  ];
   const publicRoutes = ["/", "/login", "/register"];
 
   // Route yang bisa diakses oleh user yang sudah login

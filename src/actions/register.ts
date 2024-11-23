@@ -7,6 +7,7 @@ import {
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/utils/supabase/supabase-ssr";
 import { pending } from "@/lib/helpers/pending";
+import { headers as hd } from "next/headers";
 
 export const register = async (
   formState: RegisterFormState,
@@ -18,7 +19,11 @@ export const register = async (
   const password = formData.get("password");
   const confirmPassword = formData.get("confirmPassword");
 
-  const host = process.env.NEXT_PUBLIC_HOST;
+  const headers = await hd();
+  const protocol = headers.get("x-forwarded-proto") || "http";
+  const site = headers.get("host") || "localhost:3000";
+  const host = `${protocol}://${site}`;
+
   const successfullRegisterPath = "/register/thanks";
   // Simulate a pending request
 
