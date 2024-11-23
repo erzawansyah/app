@@ -1,6 +1,7 @@
 import React from "react";
 import VoucherItems, { VoucherItemsProps, } from "@/components/Vouchers/VoucherItems";
 import { sortVouchers } from "@/lib/helpers/voucherSort";
+import { createClient } from "@/lib/utils/supabase/supabase-ssr";
 
 const voucherItemsData: VoucherItemsProps[] = [
     {
@@ -36,8 +37,9 @@ const voucherItemsData: VoucherItemsProps[] = [
 ];
 
 
-const Vouchers: React.FC = () => {
-    const vouchers = sortVouchers(voucherItemsData);
+const Vouchers: React.FC = async () => {
+    const data = await getVoucherData()
+    const vouchers = sortVouchers(data);
 
     return (
         <div className="max-w-md mx-auto flex flex-col gap-6">
@@ -49,3 +51,37 @@ const Vouchers: React.FC = () => {
 };
 
 export default Vouchers;
+
+
+
+const getVoucherData = async () => {
+    const supabase = await createClient();
+
+    const { data: vouchers, error: errorVouchers } = await supabase.from("vouchers")
+        .select(`*, voucher_claims(*)`)
+
+    if (errorVouchers) {
+        throw new Error(errorVouchers.message);
+    }
+
+    const response = vouchers?.map((voucher) => {
+        return {
+            ...voucher,
+            usedCount: voucher.voucher_claims.map((claim: any) => claim.is_redeemed ? 1 : 0).reduce((a: number, b: number) => a + b, 0),
+            totalCount: voucher.voucher_claims.length,
+        };
+    });
+
+    return response?.map((voucher: any) => {
+        return {
+            id: voucher.id,
+            title: voucher.title,
+            description: voucher.description,
+            imageUrl: voucher.image_url,
+            startDate: voucher.start_date,
+            expiryDate: voucher.end_date,
+            usedCount: voucher.usedCount,
+            totalCount: voucher.totalCount,
+        };
+    });
+};
