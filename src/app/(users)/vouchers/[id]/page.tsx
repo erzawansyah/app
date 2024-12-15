@@ -31,16 +31,26 @@ export default VoucherDetailPage;
 
 const getVoucherData = async (id: string): Promise<VoucherDetailProps> => {
     const supabase = await createClient();
+    const { data: userData, error } = await supabase.auth.getUser();
+
+    if (error) {
+        throw error;
+    }
 
     const { data: voucher, error: errorVoucher } = await supabase
         .from("vouchers")
-        .select('*, voucher_claims(*)')
-        .eq('id', id)
+        .select('*, claims:voucher_claims(*)')
+        .match({
+            id: id,
+            'claims.user_id': userData.user?.id as string,
+        })
         .single();
 
     if (errorVoucher) {
         throw errorVoucher;
     }
+
+    console.log(voucher);
 
     return {
         id: voucher.id,
@@ -49,6 +59,9 @@ const getVoucherData = async (id: string): Promise<VoucherDetailProps> => {
         imageUrl: voucher.image_url || undefined,
         startDate: voucher.start_date,
         expiryDate: voucher.end_date,
-        codes: voucher.voucher_claims.filter((claim: VoucherClaim) => !claim.is_redeemed).map((claim: VoucherClaim) => claim.voucher_code),
+        codes: voucher.claims.map((claim: VoucherClaim) => ({
+            code: claim.voucher_code,
+            isRedeemed: claim.is_redeemed,
+        })),
     }
 }

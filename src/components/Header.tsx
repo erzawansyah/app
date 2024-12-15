@@ -35,6 +35,11 @@ const Header: React.FC<HeaderProps> = ({ isLoggedIn, profile }) => {
         });
     };
 
+    const handleLogout = async () => {
+        closeMenu();
+        await logout();
+    };
+
     return (
         <header className="bg-primary text-white py-4 px-6 border-b-4 border-black">
             <div className="max-w-7xl mx-auto flex justify-between items-center">
@@ -89,6 +94,7 @@ const Header: React.FC<HeaderProps> = ({ isLoggedIn, profile }) => {
                         ))}
                         <form action={logout}>
                             <button
+                                type='submit'
                                 className="bg-white text-primary font-bold text-sm py-2 px-4 border-2 border-black rounded-md hover:bg-gray-200 hover:scale-105 transition-transform duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
                                 aria-label="Logout"
                             >
@@ -117,9 +123,9 @@ const Header: React.FC<HeaderProps> = ({ isLoggedIn, profile }) => {
                                 {link.label}
                             </Link>
                         ))}
-                        <form action={logout}>
+                        <form action={handleLogout}>
                             <button
-                                type='button'
+                                type='submit'
                                 className="w-full bg-primary text-white font-bold text-sm py-2 px-4 border-2 border-black rounded-md hover:bg-primary-dark hover:scale-105 transition-transform duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white"
                                 aria-label="Logout"
                             >

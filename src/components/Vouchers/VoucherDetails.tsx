@@ -11,7 +11,10 @@ export interface VoucherDetailProps {
     imageUrl?: string;
     startDate: string;
     expiryDate: string;
-    codes: string[]; // Daftar kode voucher yang tersedia
+    codes: {
+        code: string;
+        isRedeemed: boolean;
+    }[];
 }
 
 const VoucherDetail: React.FC<VoucherDetailProps> = (props) => {
@@ -21,10 +24,9 @@ const VoucherDetail: React.FC<VoucherDetailProps> = (props) => {
     const [availableCodes, setAvailableCodes] = useState(codes); // Daftar kode yang belum diklaim
 
     const handleClaim = (code: string) => {
-        // Hapus kode yang sudah diklaim dari daftar
-        setAvailableCodes((prev) => prev.filter((c) => c !== code));
-
-        // Redirect ke halaman klaim voucher
+        setAvailableCodes((c) => {
+            return c.filter((item) => item.code !== code);
+        })    // Redirect ke halaman klaim voucher
         router.push(`/claims/${code}`);
     };
 
@@ -59,17 +61,25 @@ const VoucherDetail: React.FC<VoucherDetailProps> = (props) => {
                 <h2 className="text-2xl font-bold text-black mb-4">Kode Voucher</h2>
                 {availableCodes.length > 0 ? (
                     <ul className="space-y-4">
-                        {availableCodes.map((code) => (
+                        {availableCodes.map((item) => (
                             <li
-                                key={code}
+                                key={item.code}
                                 className="flex justify-between items-center p-4 bg-gray-100 border-2 border-black rounded-md"
                             >
-                                <span className="font-mono text-black">{code}</span>
+                                <span className="font-mono text-black">{item.code}</span>
                                 <button
-                                    onClick={() => handleClaim(code)}
-                                    className="bg-primary text-white font-bold py-2 px-4 border-2 border-black rounded-md hover:bg-primary-dark transition-transform duration-200"
+                                    type="button"
+                                    disabled={item.isRedeemed}
+                                    onClick={() => {
+                                        if (!item.isRedeemed) {
+                                            handleClaim(item.code);
+                                        }
+                                    }}
+                                    className="bg-primary text-white font-bold py-2 px-4 border-2 border-black rounded-md hover:bg-primary-dark transition-transform duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-400"
                                 >
-                                    Klaim
+                                    {
+                                        item.isRedeemed ? "Sudah Diklaim" : "Klaim"
+                                    }
                                 </button>
                             </li>
                         ))}

@@ -40,9 +40,15 @@ export default Vouchers;
 
 const getVoucherData = async () => {
     const supabase = await createClient();
+    const user = await supabase.auth.getUser();
+
+    if (!user) {
+        throw new Error("User not found");
+    }
 
     const { data: vouchers, error: errorVouchers } = await supabase.from("vouchers")
-        .select(`*, voucher_claims(*)`)
+        .select(`*, claims:voucher_claims(*)`)
+        .eq("claims.user_id", user.data.user?.id as string);
 
     if (errorVouchers) {
         throw new Error(errorVouchers.message);
@@ -51,8 +57,8 @@ const getVoucherData = async () => {
     const response = vouchers?.map((voucher) => {
         return {
             ...voucher,
-            usedCount: voucher.voucher_claims.map((claim: VoucherClaim) => claim.is_redeemed ? 1 : 0).reduce((a: number, b: number) => a + b, 0),
-            totalCount: voucher.voucher_claims.length,
+            usedCount: voucher.claims.map((claim: VoucherClaim) => claim.is_redeemed ? 1 : 0).reduce((a: number, b: number) => a + b, 0),
+            totalCount: voucher.claims.length,
         };
     });
 
