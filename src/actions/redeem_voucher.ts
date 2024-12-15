@@ -1,8 +1,6 @@
 "use server";
 
 import { createClient } from "@/lib/utils/supabase/supabase-ssr";
-import { redirect } from "next/navigation";
-
 export const redeemVoucher = async (formData: FormData) => {
   // Get the voucher code from the form data
   const voucherCode = formData.get("voucherCode") as string;

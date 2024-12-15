@@ -1,4 +1,3 @@
-import { redeemVoucher } from '@/actions/redeem_voucher';
 import RedeemConfirmationButton from '@/components/RedeemConfirmationButton';
 import { getUserRole } from '@/lib/helpers/getProfile';
 import { createClient } from '@/lib/utils/supabase/supabase-ssr';
@@ -55,7 +54,17 @@ const CrewRedeemPage = async ({
             </Link>
         </div>;
     }
-    const { data: profile, error: errorProfile } = await supabase.from('profiles').select('fullname, email_address').eq('id', claims?.user_id!).single();
+    const userId = claims?.user_id;
+    if (!userId) {
+        return <div className="max-w-md w-full p-6 bg-red-100 border-4 border-l-8 border-red-700 rounded-lg shadow-md mx-auto">
+            <h1 className="text-3xl font-bold text-red-700 mb-2">Error</h1>
+            <p className="text-red-700">User ID not found</p>
+            <Link className="text-primary underline mt-4" href="/vouchers">
+                Back to Vouchers
+            </Link>
+        </div>;
+    }
+    const { data: profile, error: errorProfile } = await supabase.from('profiles').select('fullname, email_address').eq('id', userId).single();
     if (errorProfile) {
         return <div className="max-w-md w-full p-6 bg-red-100 border-4 border-l-8 border-red-700 rounded-lg shadow-md mx-auto">
             <h1 className="text-3xl font-bold text-red-700 mb-2">Error</h1>
@@ -68,8 +77,8 @@ const CrewRedeemPage = async ({
     }
     const voucher = claims?.vouchers;
     const isRedeemed = claims?.is_redeemed;
-    const formatedClaimDate = new Date(claims?.claimed_at!).toLocaleString();
-    const formatedRedeemDate = isRedeemed ? new Date(claims?.redeemed_at!).toLocaleString() : 'Not Redeemed';
+    const formatedClaimDate = claims?.claimed_at ? new Date(claims.claimed_at).toLocaleString() : 'Unknown';
+    const formatedRedeemDate = isRedeemed && claims?.redeemed_at ? new Date(claims.redeemed_at).toLocaleString() : 'Not Redeemed';
 
 
 
