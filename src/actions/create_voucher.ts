@@ -104,8 +104,8 @@ export const createVouchers = async (
       };
     }
 
-    console.log("Voucher created successfully.");
-    redirect("/crew/vouchers");
+    console.log("Voucher created successfully. Redirecting...");
+    return redirect("/crew/vouchers"); // Redirect setelah sukses
   } catch (error) {
     console.error("Unexpected error during voucher creation:", error);
     return {
