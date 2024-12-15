@@ -5,6 +5,7 @@ import {
 } from "@/lib/definitions/create_voucher.types";
 import { pending } from "@/lib/helpers/pending";
 import { createClient } from "@/lib/utils/supabase/supabase-ssr";
+import { redirect } from "next/navigation";
 
 export const createVouchers = async (
   formState: CreateVoucherFormState,
@@ -104,9 +105,7 @@ export const createVouchers = async (
     }
 
     console.log("Voucher created successfully.");
-    return {
-      message: "Voucher berhasil dibuat.",
-    };
+    redirect("/crew/vouchers");
   } catch (error) {
     console.error("Unexpected error during voucher creation:", error);
     return {
