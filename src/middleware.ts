@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { updateSession } from "@/lib/utils/supabase/middleware";
+import { getUserRole } from "./lib/helpers/getProfile";
 
 export async function middleware(request: NextRequest) {
   const { user, response } = await updateSession(request);
@@ -14,11 +15,18 @@ export async function middleware(request: NextRequest) {
     "/events",
     "/claims",
   ];
+
+  const crewRoutes = ["/crew"];
+
   const publicRoutes = ["/", "/login", "/register", "/register/thanks"];
 
   // Route yang bisa diakses oleh user yang sudah login
   // Jika user sudah login, maka user bisa mengakses route yang ada di dalam array protectedRoutes beserta route childnya
   if (user) {
+    const role = await getUserRole(user);
+    if (role === "crew") {
+      protectedRoutes.push(...crewRoutes);
+    }
     if (
       protectedRoutes.some((route) =>
         request.nextUrl.pathname.startsWith(route)

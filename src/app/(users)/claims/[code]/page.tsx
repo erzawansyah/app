@@ -17,7 +17,7 @@ const ClaimVoucher = async ({
     const voucher = await getVoucherClaimsData((await params).code);
     const is_redeemed = voucher?.is_redeemed;
 
-    const url = `${host}/api/vouchers/claim?code=${voucher?.voucher_code}`;
+    const url = `${host}/crew/vouchers/redeem/?code=${voucher?.voucher_code}`;
     const voucher_url = `/vouchers/${voucher?.voucher_id}`;
 
     if (!voucher) {

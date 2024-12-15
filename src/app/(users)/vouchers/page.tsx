@@ -39,7 +39,7 @@ export default Vouchers;
 
 
 
-const getVoucherData = async () => {
+export const getVoucherData = async () => {
     const supabase = await createClient();
 
     const { data: vouchers, error: errorVouchers } = await supabase.from("vouchers")
