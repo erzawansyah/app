@@ -76,7 +76,7 @@ export const createVouchers = async (
       } else {
         console.log("File upload successful:", fileResponse);
         uploadedImageUrl = fileResponse?.path
-          ? `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${fileResponse.path}`
+          ? `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/voucher-images/${fileResponse.path}`
           : "https://via.placeholder.com/300x200";
       }
     }
