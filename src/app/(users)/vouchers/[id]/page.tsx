@@ -46,7 +46,7 @@ const getVoucherData = async (id: string): Promise<VoucherDetailProps> => {
         id: voucher.id,
         title: voucher.title,
         description: voucher.description,
-        imageUrl: voucher.image_url,
+        imageUrl: voucher.image_url || undefined,
         startDate: voucher.start_date,
         expiryDate: voucher.end_date,
         codes: voucher.voucher_claims.filter((claim: VoucherClaim) => !claim.is_redeemed).map((claim: VoucherClaim) => claim.voucher_code),

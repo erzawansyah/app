@@ -12,7 +12,6 @@ export interface VoucherDefinition {
     image_url: string | null; // URL gambar voucher (opsional)
     start_date: string; // Tanggal mulai berlaku
     end_date: string; // Tanggal berakhir berlaku
-    is_active: boolean; // Status apakah voucher aktif
     created_at: string; // Timestamp saat voucher dibuat
     updated_at: string; // Timestamp terakhir kali voucher diperbarui
     prefix: string; // Prefix unik untuk voucher
@@ -39,7 +38,7 @@ export default Vouchers;
 
 
 
-export const getVoucherData = async () => {
+const getVoucherData = async () => {
     const supabase = await createClient();
 
     const { data: vouchers, error: errorVouchers } = await supabase.from("vouchers")
